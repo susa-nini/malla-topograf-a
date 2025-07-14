@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Malla Curricular - Topografía</title>
+  <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+  <style>
+    #mynetwork {
+      width: 100%;
+      height: 800px;
+      border: 1px solid lightgray;
+    }
+  </style>
+</head>
+<body>
+<h2>Malla Curricular Interactiva - Tecnología en Levantamientos Topográficos</h2>
+<div id="mynetwork"></div>
+
+<script type="text/javascript">
+  // Nodos: materias con color por semestre
+  const nodes = new vis.DataSet([
+    // Semestre 1 - rojo
+    {id: 1, label: "Álgebra superior\n[4 cr]", group: 'sem1'},
+    {id: 2, label: "Cálculo diferencial\n[4 cr]", group: 'sem1'},
+    {id: 3, label: "Levantamientos topográficos I\n[4 cr]", group: 'sem1'},
+    {id: 4, label: "Práctica Lev. Topográficos I\n[2 cr]", group: 'sem1'},
+    {id: 5, label: "Procesos de lectura y escritura\n[2 cr]", group: 'sem1'},
+    {id: 6, label: "Cultura física\n[1 cr]", group: 'sem1'},
+
+    // Semestre 2 - rosado
+    {id: 7, label: "Introducción a la geología\n[2 cr]", group: 'sem2'},
+    {id: 8, label: "Levantamientos topográficos II\n[4 cr]", group: 'sem2'},
+    {id: 9, label: "Mecánica\n[4 cr]", group: 'sem2'},
+    {id: 10, label: "Optativa I\n[2 cr]", group: 'sem2'},
+    {id: 11, label: "Práctica Lev. Topográficos II\n[2 cr]", group: 'sem2'},
+    {id: 12, label: "Cálculo integral\n[4 cr]", group: 'sem2'},
+
+    // Semestre 3 - morado
+    {id: 13, label: "Dibujo sistematizado I\n[2 cr]", group: 'sem3'},
+    {id: 14, label: "Electromagnetismo\n[4 cr]", group: 'sem3'},
+    {id: 15, label: "Epistemología\n[2 cr]", group: 'sem3'},
+    {id: 16, label: "Geodesia\n[2 cr]", group: 'sem3'},
+    {id: 17, label: "Hidrología\n[2 cr]", group: 'sem3'},
+    {id: 18, label: "Optativa II\n[2 cr]", group: 'sem3'},
+    {id: 19, label: "Planeación del serv. topográfico\n[2 cr]", group: 'sem3'},
+
+    // Semestre 4 - azul
+    {id: 20, label: "Inglés I\n[2 cr]", group: 'sem4'},
+    {id: 21, label: "Dibujo sistematizado II\n[2 cr]", group: 'sem4'},
+    {id: 22, label: "Electiva de profundización I\n[2 cr]", group: 'sem4'},
+    {id: 23, label: "Laboratorio de física\n[1 cr]", group: 'sem4'},
+    {id: 24, label: "Levantamiento de vías\n[4 cr]", group: 'sem4'},
+    {id: 25, label: "Práctica levantamiento de vías\n[2 cr]", group: 'sem4'},
+
+    // Semestre 5 - verde
+    {id: 26, label: "Electiva profundización II\n[2 cr]", group: 'sem5'},
+    {id: 27, label: "Administración de obras\n[3 cr]", group: 'sem5'},
+    {id: 28, label: "Cartografía digital\n[2 cr]", group: 'sem5'},
+    {id: 29, label: "Inglés II\n[2 cr]", group: 'sem5'},
+    {id: 30, label: "Levantamientos fotogram. y teledet.\n[2 cr]", group: 'sem5'},
+    {id: 31, label: "Metodología de la investigación I\n[2 cr]", group: 'sem5'},
+    {id: 32, label: "Topografía vial subterránea\n[2 cr]", group: 'sem5'},
+
+    // Semestre 6 - amarillo
+    {id: 33, label: "Electiva profundización III\n[2 cr]", group: 'sem6'},
+    {id: 34, label: "Geografía y SIG I\n[2 cr]", group: 'sem6'},
+    {id: 35, label: "Normatividad técnica dato geográfico\n[2 cr]", group: 'sem6'},
+    {id: 36, label: "Obras hidráulicas y sanitarias\n[4 cr]", group: 'sem6'},
+    {id: 37, label: "Sistemas catastrales\n[2 cr]", group: 'sem6'},
+    {id: 38, label: "Cálculo multivariable\n[4 cr]", group: 'sem6'},
+    {id: 39, label: "Ética\n[2 cr]", group: 'sem6'}
+  ]);
+
+  const edges = new vis.DataSet([
+    {from: 1, to: 9, label: "prerreq"},
+    {from: 2, to: 12, label: "prerreq"},
+    {from: 3, to: 8, label: "prerreq"},
+    {from: 3, to: 11, label: "correq"},
+    {from: 4, to: 3, label: "correq"},
+    {from: 8, to: 19, label: "prerreq"},
+    {from: 7, to: 17, label: "prerreq"},
+    {from: 9, to: 14, label: "prerreq"},
+    {from: 12, to: 14, label: "prerreq"},
+    {from: 13, to: 21, label: "prerreq"},
+    {from: 14, to: 23, label: "prerreq"},
+    {from: 19, to: 24, label: "prerreq"},
+    {from: 24, to: 32, label: "prerreq"},
+    {from: 24, to: 25, label: "correq"},
+    {from: 25, to: 24, label: "correq"},
+    {from: 22, to: 26, label: "prerreq"},
+    {from: 20, to: 29, label: "prerreq"},
+    {from: 28, to: 30, label: "correq"},
+    {from: 30, to: 28, label: "correq"},
+    {from: 16, to: 30, label: "prerreq"},
+    {from: 30, to: 34, label: "prerreq"},
+    {from: 21, to: 35, label: "prerreq"},
+    {from: 26, to: 33, label: "correq"}
+  ]);
+
+  const container = document.getElementById('mynetwork');
+
+  const data = { nodes, edges };
+
+  const options = {
+    groups: {
+      sem1: {color: {background: '#f28b82'}, borderWidth: 2},
+      sem2: {color: {background: '#fbbc04'}, borderWidth: 2},
+      sem3: {color: {background: '#d7aefb'}, borderWidth: 2},
+      sem4: {color: {background: '#aecbfa'}, borderWidth: 2},
+      sem5: {color: {background: '#ccff90'}, borderWidth: 2},
+      sem6: {color: {background: '#fff475'}, borderWidth: 2}
+    },
+    layout: {
+      hierarchical: {
+        direction: 'LR',
+        sortMethod: 'hubsize',
+        levelSeparation: 180,
+        nodeSpacing: 150
+      }
+    },
+    edges: {
+      arrows: 'to',
+      font: {align: 'middle'}
+    },
+    nodes: {
+      shape: 'box',
+      margin: 10,
+      font: {bold: true, size: 14}
+    },
+    physics: false
+  };
+
+  const network = new vis.Network(container, data, options);
+</script>
+</body>
+</html>
